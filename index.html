@@ -65,18 +65,78 @@ const writersData = [
 ];
 
 // --- 14道科学测试题 ---
+// --- 补全 14 道测试题 ---
 const questions = [
     { q: "选择最打动你的句子", options: [
         { t: "“活着就是为了活着本身。”", s: { reality: 3, depth: 2 } },
         { t: "“我行过许多地方的桥，看过许多次数的云。”", s: { lyric: 3, aesthetic: 3 } },
-        { t: "“在黑暗中并肩行走，胜过在光明中独自行走。”", s: { solitude: 2, relationship: 2 } }
+        { t: "“时间不是一条直线，而是无数个分叉的小径。”", s: { magic: 3, philosophy: 3 } }
     ]},
     { q: "哪种视觉意向更让你平静？", options: [
         { t: "大片留白的极简水墨", s: { minimal: 3, eastern: 2 } },
         { t: "色彩浓郁的拉美庄园", s: { complex: 2, magic: 3 } },
         { t: "日落时分辽阔的新疆牧场", s: { nature: 3, heal: 2 } }
+    ]},
+    { q: "你更偏好哪种词语的质感？", options: [
+        { t: "温暖、柔软、火炉、拥抱", s: { heal: 3, emotion: 2 } },
+        { t: "深邃、幽暗、深渊、谜题", s: { solitude: 3, depth: 2 } },
+        { t: "锐利、撕裂、刀锋、清醒", s: { reality: 3, critical: 2 } }
+    ]},
+    { q: "你喜欢的叙事节奏是？", options: [
+        { t: "像河水缓缓流淌，不放过任何细节", s: { lyric: 3, detail: 3 } },
+        { t: "像电影剪辑，紧凑、凌厉、快节奏", s: { plot: 3, modern: 2 } },
+        { t: "像拼图，碎片化、跳跃、充满实验性", s: { experiment: 3, structure: 2 } }
+    ]},
+    { q: "描述一个美好时刻，你会用？", options: [
+        { t: "“那一刻，时间仿佛静止了。”", s: { aesthetic: 3, lyric: 2 } },
+        { t: "“我突然意识到生活的荒谬。”", s: { philosophy: 3, logic: 2 } },
+        { t: "“一切坚固的东西都烟消云散了。”", s: { critical: 3, history: 2 } }
+    ]},
+    { q: "你更喜欢读到什么样的人物？", options: [
+        { t: "孤独的探索者，在世界边缘行走", s: { solitude: 3, self: 3 } },
+        { t: "复杂的两性关系，爱恨纠葛", s: { relationship: 3, emotion: 2 } },
+        { t: "温暖的家庭故事，几代人的传承", s: { family: 3, history: 2 } }
+    ]},
+    { q: "最能引起你共鸣的主题是？", options: [
+        { t: "个人成长与自我实现", s: { growth: 3, self: 2 } },
+        { t: "社会正义与时代变迁", s: { society: 3, critical: 2 } },
+        { t: "爱与人性的永恒真相", s: { humanity: 3, depth: 2 } }
+    ]},
+    { q: "哪种封面设计最吸引你？", options: [
+        { t: "极简纯色，只有书名", s: { minimal: 3, logic: 2 } },
+        { t: "复古油画，细节繁复", s: { classic: 3, aesthetic: 2 } },
+        { t: "现代拼贴，色彩冲撞", s: { experiment: 3, modern: 2 } }
+    ]},
+    { q: "读到伤感处，你希望作者？", options: [
+        { t: "用优美的语言升华痛苦，给予安慰", s: { aesthetic: 3, heal: 2 } },
+        { t: "冷峻客观地描述，不做任何修饰", s: { reality: 3, logic: 2 } },
+        { t: "展现人物激烈的反抗，释放情绪", s: { emotion: 3, power: 2 } }
+    ]},
+    { q: "你如何看待“孤独”？", options: [
+        { t: "是必须忍受的苦难", s: { depth: 2, reality: 2 } },
+        { t: "是灵魂自由的勋章", s: { solitude: 3, lyric: 2 } },
+        { t: "是观察世界的最佳窗口", s: { philosophy: 3, logic: 2 } }
+    ]},
+    { q: "理想的结局应该是？", options: [
+        { t: "尘埃落定，给人希望的曙光", s: { heal: 3, classic: 2 } },
+        { t: "戛然而止，留下无尽的悬念", s: { experiment: 2, logic: 2 } },
+        { t: "荒诞且真实，直面惨淡的人生", s: { reality: 3, depth: 3 } }
+    ]},
+    { q: "你读文学作品的主要目的是？", options: [
+        { t: "寻找共鸣，治愈现实的疲惫", s: { heal: 3, emotion: 3 } },
+        { t: "挑战认知，探索思想的边界", s: { philosophy: 3, depth: 3 } },
+        { t: "见证历史，理解社会的样貌", s: { society: 3, history: 3 } }
+    ]},
+    { q: "哪种叙事视角你最喜欢？", options: [
+        { t: "亲切的第一人称（“我”）", s: { self: 3, emotion: 2 } },
+        { t: "全知全能的上帝视角", s: { classic: 3, history: 2 } },
+        { t: "多线索并行的群像叙事", s: { society: 3, complex: 2 } }
+    ]},
+    { q: "如果只能选一句话作为信条：", options: [
+        { t: "“做一个自由的人。”", s: { self: 3, solitude: 2 } },
+        { t: "“活着，就要努力地活着。”", s: { reality: 3, growth: 2 } },
+        { t: "“爱与被爱，是人生唯一真谛。”", s: { humanity: 3, emotion: 3 } }
     ]}
-    // 逻辑循环会支持全部14道题
 ];
 
 let currentStep = 0;
