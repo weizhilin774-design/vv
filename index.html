@@ -48,17 +48,98 @@
 <script>
 // 这里放入我之前发给你的 writersData 名单（60人）
 const writersData = [
-    { name: "余华", bio: "现实残酷的代言人", feature: "以简洁有力的文字直击生存本质，不回避苦难，反而从中汲取力量。", books: ["《活着》"], scores: { style: 9, emotion: 10, theme: 9 } },
-    { name: "卡夫卡", bio: "荒诞现代主义奠基人", feature: "你是这个世界的局外人吗？他最懂你无处安放的焦虑。", books: ["《变形记》"], scores: { style: 10, emotion: 6, theme: 10 } },
-    // ... 请在这里继续粘贴之前补全的作家数据 ...
-];
+    // --- 中文作家 (精选代表) ---
+    { name: "余华", bio: "现实残酷的代言人", feature: "以简洁有力的文字直击生存本质，不回避苦难，反而从中汲取力量。", books: ["《活着》", "《许三观卖血记》"], scores: { style: 9, emotion: 10, theme: 9, visual: 5, words: 8, pacing: 7, relation: 8 } },
+    { name: "张爱玲", bio: "华丽背后的苍凉意境", feature: "冷眼看穿世俗爱情与人性的千疮百孔，文字精致且自带冷意。", books: ["《倾城之恋》", "《红玫瑰与白玫瑰》"], scores: { style: 8, emotion: 10, theme: 9, visual: 9, words: 10, pacing: 5, relation: 9 } },
+    { name: "李娟", bio: "阿勒泰的清新之风", feature: "最纯粹的自然主义，带你逃离都市，回到万物生长的原野。", books: ["《我的阿勒泰》", "《冬牧场》"], scores: { style: 6, emotion: 8, theme: 6, visual: 9, words: 7, pacing: 4, relation: 7 } },
+    { name: "史铁生", bio: "生命哲思与苦难升华", feature: "在地坛的静思中，将残缺的身体转化为最健全的灵魂。文字极具厚度。", books: ["《我与地坛》", "《务虚笔记》"], scores: { style: 7, emotion: 9, theme: 10, visual: 8, words: 9, pacing: 4, relation: 7 } },
+    { name: "颜歌", bio: "平乐镇文学宇宙", feature: "以极致的方言写出后现代的人间烟火，优雅与世俗的完美平衡。", books: ["《平乐县志》", "《五月女王》"], scores: { style: 9, emotion: 7, theme: 8, visual: 7, words: 9, pacing: 6, relation: 8 } },
+    { name: "班宇", bio: "冷峻克制的东北叙事", feature: "文字像冰冻的河水，底下暗涌着普通人被时代碾压后的温情。", books: ["《冬泳》", "《逍遥游》"], scores: { style: 8, emotion: 8, theme: 8, visual: 7, words: 6, pacing: 7, relation: 8 } },
+    { name: "林奕含", bio: "极致痛苦的房思琪式呐喊", feature: "用最华美的辞藻去包裹最崩塌的人生，令人心碎的文学高度。", books: ["《房思琪的初恋乐园》"], scores: { style: 8, emotion: 10, theme: 10, visual: 8, words: 10, pacing: 6, relation: 9 } },
+    { name: "沈从文", bio: "湘西边地的牧歌", feature: "用最清澈的文字，守护人性中最后的一点纯粹与尊严。", books: ["《边城》"], scores: { style: 6, emotion: 8, theme: 7, visual: 10, words: 9, pacing: 4, relation: 8 } },
+    { name: "毕飞宇", bio: "最懂女人心的心理描写", feature: "对心理活动与权力关系的捕捉极其敏锐，文字细腻如丝。", books: ["《推拿》", "《青衣》"], scores: { style: 8, emotion: 9, theme: 8, visual: 7, words: 8, pacing: 7, relation: 9 } },
+    { name: "王小波", bio: "自由精神与黑色幽默", feature: "在荒谬的世界里做一个特立独行的猪，文字浪漫且富有逻辑。", books: ["《黄金时代》", "《沉默的大多数》"], scores: { style: 10, emotion: 7, theme: 10, visual: 6, words: 8, pacing: 8, relation: 7 } },
+
+    // --- 外国作家 (精选代表) ---
+    { name: "卡夫卡", bio: "荒诞现代主义奠基人", feature: "你是这个世界的局外人吗？卡夫卡最懂那些无处安放的焦虑。", books: ["《变形记》", "《审判》"], scores: { style: 10, emotion: 6, theme: 10, visual: 7, words: 8, pacing: 7, relation: 6 } },
+    { name: "费兰特", bio: "那不勒斯女性史诗", feature: "匿名背后是最赤裸的真实，深刻剖析女性成长的痛苦与互助。", books: ["《我的天才女友》"], scores: { style: 8, emotion: 9, theme: 8, visual: 7, words: 8, pacing: 7, relation: 10 } },
+    { name: "博尔赫斯", bio: "迷宫制作者、虚构大师", feature: "如果你喜欢哲学思考与数学般精确的想象力，他是你的唯一。", books: ["《小径分叉的花园》"], scores: { style: 10, emotion: 5, theme: 10, visual: 9, words: 10, pacing: 5, relation: 4 } },
+    { name: "石黑一雄", bio: "记忆、遗忘与错位的忠诚", feature: "克制到极致的笔法。他从不直接书写悲伤，却让你在合上书后泪流满面。", books: ["《长日将尽》", "《莫失莫忘》"], scores: { style: 8, emotion: 9, theme: 9, visual: 8, words: 8, pacing: 5, relation: 9 } },
+    { name: "马尔克斯", bio: "百年孤寂、魔幻之源", feature: "将拉丁美洲的现实与神话无缝衔接，展现恢弘壮丽的家族史诗。", books: ["《百年孤独》", "《霍乱时期的爱情》"], scores: { style: 9, emotion: 9, theme: 10, visual: 10, words: 9, pacing: 6, relation: 9 } },
+    { name: "伍尔夫", bio: "意识流与女性空间", feature: "文字像波浪一样涌动，捕捉瞬间最细微的情绪变化与感官细节。", books: ["《达洛维夫人》", "《到灯塔去》"], scores: { style: 9, emotion: 9, theme: 9, visual: 9, words: 10, pacing: 3, relation: 7 } },
+    { name: "三岛由纪夫", bio: "极致的毁灭美学", feature: "对美有着近乎疯狂的执着，在暴力与
 
 const questions = [
     { q: "如果你能拥有一张画，你希望它是？", options: [
-        { t: "极简的黑白版画，只有冷冽的线条", s: { style: 10, theme: 5 } },
-        { t: "色彩浓郁、人物繁多的油画", s: { style: 5, theme: 8 } }
+        { t: "极简的黑白版画，只有冷冽的线条", s: { style: 4, visual: 2, words: 2 } },
+        { t: "色彩浓郁、人物繁多的拉美油画", s: { style: 3, visual: 5, words: 2 } },
+        { t: "一幅充满隐喻的超现实拼贴图", s: { style: 5, visual: 3, theme: 4 } }
+    ]},
+    { q: "当你面对一种无法言说的痛苦，你更倾向？", options: [
+        { t: "冷峻地剖析它，像做手术一样精准", s: { words: 5, emotion: 2, pacing: 4 } },
+        { t: "用优美的词句包裹它，赋予其诗意", s: { style: 4, words: 5, emotion: 4 } },
+        { t: "沉默地感受它，在孤独中消化", s: { emotion: 5, relation: 2, theme: 4 } }
+    ]},
+    { q: "你如何看待一段刻骨铭心的友谊？", options: [
+        { t: "即使充满竞争与嫉妒，也是彼此的救赎", s: { relation: 5, emotion: 4 } },
+        { t: "它是两个孤独灵魂在荒原上的偶遇", s: { relation: 3, theme: 5, style: 3 } },
+        { t: "它是家族、时代背景下的必然连接", s: { relation: 4, theme: 3, pacing: 2 } }
+    ]},
+    { q: "读到哪里你会最想“标记”？", options: [
+        { t: "极其深刻的人生格言、哲学金句", s: { theme: 5, words: 4 } },
+        { t: "对感官（气味、光影）惊为天人的描写", s: { visual: 5, words: 5 } },
+        { t: "反转惊人、停不下来的情节段落", s: { pacing: 5, style: 2 } }
+    ]},
+    { q: "选择你理想中的生活节奏：", options: [
+        { t: "慢火炖煮，不放过任何细腻的细节", s: { pacing: 1, visual: 4, style: 3 } },
+        { t: "大步流星，情节跌宕起伏", s: { pacing: 5, emotion: 2 } },
+        { t: "像梦游一样，在碎片中跳跃", s: { pacing: 3, style: 5, visual: 2 } }
+    ]},
+    { q: "你认为文学最大的作用是？", options: [
+        { t: "让我发现自己从未意识到的真相", s: { theme: 5, emotion: 3, style: 4 } },
+        { t: "为我疲倦的生活提供一处避难所", s: { emotion: 5, visual: 3 } },
+        { t: "见证那些正在消失的人群与历史", s: { theme: 4, relation: 4, pacing: 2 } }
+    ]},
+    { q: "哪种“孤独”更让你有共鸣？", options: [
+        { t: "被人群推挤、被体制束缚的现代孤独", s: { theme: 5, relation: 2, style: 4 } },
+        { t: "身处旷野、面对宇宙的虚无感", s: { theme: 3, emotion: 3, visual: 5 } },
+        { t: "在一场热烈聚会过后的寂寞", s: { emotion: 5, relation: 4, words: 3 } }
+    ]},
+    { q: "如果要把你的生活拍成电影，色调是？", options: [
+        { t: "灰暗、粗颗粒的纪实风格", s: { visual: 1, style: 2, theme: 4 } },
+        { t: "柔焦、带有怀旧滤镜的淡彩色", s: { visual: 3, emotion: 4, words: 3 } },
+        { t: "高对比度、极其绚烂的色彩", s: { visual: 5, style: 5, emotion: 3 } }
+    ]},
+    { q: "你喜欢的对话风格是？", options: [
+        { t: "极其克制，言下之意远多于字面意思", s: { words: 2, style: 4, theme: 4 } },
+        { t: "充满火药味、直接且有力", s: { words: 3, emotion: 5, pacing: 5 } },
+        { t: "优雅、富有韵律，像跳舞一样", s: { words: 5, style: 2, visual: 3 } }
+    ]},
+    { q: "哪种场景更吸引你？", options: [
+        { t: "破旧工业区里的一场无声告别", s: { visual: 2, relation: 4, emotion: 4 } },
+        { t: "异域海岛上发生的不可思议奇迹", s: { visual: 5, style: 5, pacing: 3 } },
+        { t: "一个家族在百年间的兴衰更迭", s: { theme: 4, relation: 5, pacing: 1 } }
+    ]},
+    { q: "面对社会的虚伪，你更偏向？", options: [
+        { t: "冷嘲热讽，保持绝对的清醒", s: { theme: 5, words: 4, style: 4 } },
+        { t: "退回内心，守护自己的小天地", s: { theme: 2, emotion: 5, relation: 2 } },
+        { t: "与之共存，在灰色地带里生存", s: { theme: 3, pacing: 3, relation: 4 } }
+    ]},
+    { q: "选择一句你现在的内心独白：", options: [
+        { t: "“我只是这个世界的局外人。”", s: { theme: 5, emotion: 3, style: 4 } },
+        { t: "“活着本身就是奇迹。”", s: { theme: 2, emotion: 5, visual: 3 } },
+        { t: "“我想建立一种深刻的连接。”", s: { relation: 5, emotion: 4, words: 3 } }
+    ]},
+    { q: "如果你可以选择重生在某个年代？", options: [
+        { t: "未来的赛博世界，充满未知", s: { style: 5, visual: 2, theme: 5 } },
+        { t: "古典时代，一切都缓慢而从容", s: { pacing: 1, visual: 3, words: 5 } },
+        { t: "动荡的黄金时代，充满了浪漫与冲突", s: { emotion: 5, relation: 4, pacing: 5 } }
+    ]},
+    { q: "测试最后，你希望得到的推荐是？", options: [
+        { t: "能让我读到热泪盈眶的故事", s: { emotion: 5, relation: 4 } },
+        { t: "能让我大脑开启风暴的著作", s: { theme: 5, style: 5, words: 4 } },
+        { t: "能让我静下心来思考余生的作品", s: { theme: 4, emotion: 5, pacing: 1 } }
     ]}
-    // ... 请在这里继续粘贴之前补全的题目数据 ...
 ];
 
 let currentStep = 0;
@@ -96,23 +177,40 @@ function showResult() {
     document.getElementById('test-view').style.display = 'none';
     document.getElementById('result-view').classList.remove('hidden');
     
-    // 简易匹配逻辑
-    let bestMatch = writersData[0];
-    let maxScore = -1;
-    writersData.forEach(w => {
-        let currentMatchScore = 0;
-        for(let s in userScores) {
-            if(w.scores[s]) currentMatchScore += Math.abs(userScores[s] - w.scores[s]);
-        }
-        if(maxScore === -1 || currentMatchScore < maxScore) {
-            maxScore = currentMatchScore;
-            bestMatch = w;
+    let bestMatch = null;
+    let maxSimilarity = -Infinity;
+
+    writersData.forEach(writer => {
+        let dotProduct = 0;
+        let userMag = 0;
+        let writerMag = 0;
+
+        // 对齐 7 个维度进行向量计算
+        const traits = ['style', 'visual', 'words', 'pacing', 'emotion', 'relation', 'theme'];
+        traits.forEach(trait => {
+            let u = userScores[trait] || 0;
+            let w = writer.scores[trait] || 5;
+            dotProduct += u * w;
+            userMag += u * u;
+            writerMag += w * w;
+        });
+
+        let similarity = dotProduct / (Math.sqrt(userMag) * Math.sqrt(writerMag));
+        if (similarity > maxSimilarity) {
+            maxSimilarity = similarity;
+            bestMatch = writer;
         }
     });
 
+    // 渲染结果
     document.getElementById('match-name').innerText = bestMatch.name;
     document.getElementById('match-bio').innerText = bestMatch.bio;
     document.getElementById('match-feature').innerText = bestMatch.feature;
+    const bookBox = document.getElementById('match-books');
+    bookBox.innerHTML = '<p style="font-weight:bold; margin-bottom:5px;">【灵魂书单】</p>';
+    bestMatch.books.forEach(b => {
+        bookBox.innerHTML += `<span style="display:inline-block; background:#eee; padding:4px 10px; margin:5px; border-radius:3px; font-size:0.85rem;">${b}</span>`;
+    });
 }
 </script>
 </body>
