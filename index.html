@@ -3,216 +3,576 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>文学灵魂伴侣匹配测试</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
+    <title>找到你的文学灵魂伴侣</title>
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Zhi+Mang+Xing&family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #2c1810; --accent: #d4a574; --bg: #f8f4ed; }
-        body { background: var(--bg); color: var(--primary); font-family: "Noto Serif SC", serif; margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .container { max-width: 600px; width: 90%; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); text-align: center; }
-        .hidden { display: none !important; } /* 强制隐藏 */
-        .btn { background: var(--primary); color: white; border: none; padding: 15px 40px; border-radius: 4px; cursor: pointer; font-size: 1.1rem; transition: 0.3s; margin-top: 20px; }
-        .btn:hover { background: var(--accent); }
-        .option-btn { display: block; width: 100%; padding: 15px; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; background: none; cursor: pointer; text-align: left; transition: 0.2s; }
-        .option-btn:hover { border-color: var(--accent); background: #fdfaf5; }
-        .progress-bar { height: 4px; background: #eee; margin-bottom: 20px; border-radius: 2px; }
-        .progress-fill { height: 100%; background: var(--accent); width: 0%; transition: 0.3s; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: "Noto Serif SC", "Georgia", serif;
+            background: #f5ebe0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+        }
+        
+        /* 纸质纹理背景 */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-image: 
+                repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(139,111,71,0.03) 2px, rgba(139,111,71,0.03) 4px),
+                repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(139,111,71,0.02) 2px, rgba(139,111,71,0.02) 4px);
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .container { 
+            max-width: 800px; 
+            width: 100%; 
+            background: #faf7f2;
+            padding: 60px 50px; 
+            border-radius: 3px;
+            box-shadow: 
+                0 1px 1px rgba(0,0,0,0.08),
+                0 2px 2px rgba(0,0,0,0.06),
+                0 4px 4px rgba(0,0,0,0.04),
+                0 8px 8px rgba(0,0,0,0.03),
+                inset 0 0 100px rgba(139,111,71,0.05);
+            position: relative;
+            z-index: 2;
+            border: 1px solid rgba(139,111,71,0.15);
+        }
+        
+        /* 纸张边缘效果 */
+        .container::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border-radius: 3px;
+            box-shadow: inset 0 0 60px rgba(139,111,71,0.08);
+            pointer-events: none;
+        }
+        
+        .page { display: none; }
+        .page.active { display: block; animation: fadeIn 0.6s ease; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        h1 { 
+            font-size: 2.5rem; 
+            color: #3e2723; 
+            margin-bottom: 20px;
+            text-align: center;
+            letter-spacing: 0.1em;
+            position: relative;
+        }
+        
+        h1::after {
+            content: "";
+            display: block;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #d4a574, transparent);
+            margin: 20px auto 0;
+        }
+        
+        .subtitle { 
+            color: #5d4037; 
+            font-size: 1.1rem; 
+            line-height: 2; 
+            text-align: center;
+            margin-bottom: 40px;
+            opacity: 0.85;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #8b6f47 0%, #a0826d 100%);
+            color: #faf7f2;
+            border: none;
+            padding: 16px 50px;
+            font-size: 1.15rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: block;
+            margin: 30px auto;
+            box-shadow: 0 4px 15px rgba(139,111,71,0.3);
+            font-family: inherit;
+            letter-spacing: 0.15em;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(139,111,71,0.4);
+            background: linear-gradient(135deg, #a0826d 0%, #8b6f47 100%);
+        }
+        
+        .progress {
+            height: 3px;
+            background: rgba(139,111,71,0.15);
+            margin-bottom: 35px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .progress::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: repeating-linear-gradient(90deg, transparent 0px, transparent 10px, rgba(139,111,71,0.1) 10px, rgba(139,111,71,0.1) 11px);
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #8b6f47, #d4a574);
+            width: 0%;
+            transition: width 0.5s ease;
+            position: relative;
+        }
+        
+        .question {
+            font-size: 1.35rem;
+            color: #3e2723;
+            margin-bottom: 35px;
+            font-weight: 600;
+            line-height: 1.7;
+            text-align: center;
+        }
+        
+        .option {
+            background: rgba(255,255,255,0.5);
+            border: 1.5px solid rgba(139,111,71,0.25);
+            border-radius: 8px;
+            padding: 22px 25px;
+            margin: 18px 0;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1.05rem;
+            line-height: 1.6;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .option::before {
+            content: "";
+            position: absolute;
+            left: 0; top: 0;
+            width: 4px;
+            height: 100%;
+            background: #d4a574;
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .option:hover {
+            background: rgba(212,165,116,0.12);
+            border-color: #d4a574;
+            transform: translateX(8px);
+        }
+        
+        .option:hover::before {
+            transform: scaleY(1);
+        }
+        
+        .result-card {
+            text-align: center;
+            padding: 30px 20px;
+        }
+        
+        .result-label {
+            font-size: 0.85rem;
+            letter-spacing: 4px;
+            color: #a0826d;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            opacity: 0.7;
+        }
+        
+        .match-name {
+            font-size: 3.5rem;
+            color: #3e2723;
+            margin: 20px 0;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            position: relative;
+        }
+        
+        .match-score {
+            font-size: 5rem;
+            color: #d4a574;
+            font-weight: 800;
+            margin: 25px 0;
+            text-shadow: 2px 2px 0px rgba(139,111,71,0.1);
+        }
+        
+        .match-bio {
+            font-size: 1.25rem;
+            color: #8b6f47;
+            font-weight: 600;
+            margin: 20px 0;
+            letter-spacing: 0.05em;
+        }
+        
+        /* 手写体样式 */
+        .match-desc {
+            background: rgba(255,248,220,0.5);
+            padding: 30px;
+            border-radius: 8px;
+            line-height: 2.2;
+            color: #4e342e;
+            text-align: left;
+            margin: 30px 0;
+            font-family: "Ma Shan Zheng", "Zhi Mang Xing", cursive;
+            font-size: 1.3rem;
+            letter-spacing: 0.02em;
+            border-left: 4px solid #d4a574;
+            position: relative;
+        }
+        
+        .match-desc::before {
+            content: """;
+            position: absolute;
+            left: 15px;
+            top: 10px;
+            font-size: 3rem;
+            color: #d4a574;
+            opacity: 0.3;
+            font-family: Georgia, serif;
+        }
+        
+        .books {
+            margin: 35px 0;
+            text-align: left;
+            padding: 25px;
+            background: rgba(139,111,71,0.05);
+            border-radius: 8px;
+        }
+        
+        .books-title {
+            font-weight: 700;
+            margin-bottom: 18px;
+            font-size: 1.1rem;
+            color: #5d4037;
+        }
+        
+        .book-item {
+            display: inline-block;
+            background: #faf7f2;
+            border: 1.5px solid rgba(139,111,71,0.3);
+            padding: 10px 22px;
+            margin: 8px 6px;
+            border-radius: 25px;
+            font-size: 0.95rem;
+            color: #5d4037;
+            transition: all 0.3s;
+        }
+        
+        .book-item:hover {
+            background: rgba(212,165,116,0.15);
+            border-color: #d4a574;
+        }
+        
+        .step-info {
+            text-align: center;
+            color: #8b6f47;
+            margin-bottom: 25px;
+            font-size: 0.95rem;
+            letter-spacing: 0.1em;
+        }
+        
+        @media (max-width: 600px) {
+            .container { padding: 40px 25px; }
+            h1 { font-size: 2rem; }
+            .match-name { font-size: 2.5rem; }
+            .match-score { font-size: 4rem; }
+            .match-desc { font-size: 1.15rem; padding: 20px; }
+        }
     </style>
 </head>
 <body>
 
-<div class="container" id="app">
-    <div id="home-view">
-        <h1 style="font-size: 2rem; margin-bottom: 10px;">寻找你的文学灵魂伴侣</h1>
-        <p style="color: #666; margin-bottom: 30px;">通过 14 道测试题，在 60 位中外作家中<br>遇见那个最懂你的人。</p>
-        <button class="btn" onclick="startTest()">开始测试 →</button>
+<div class="container">
+    <!-- 首页 -->
+    <div id="homePage" class="page active">
+        <h1>找到你的文学灵魂伴侣</h1>
+        <p class="subtitle">
+            通过 14 道精心设计的测试题<br>
+            在 50 位中外作家中<br>
+            遇见那个最懂你的人
+        </p>
+        <p style="text-align: center; color: #a0826d; margin: 25px 0; font-size: 0.95rem;">
+            ⏱ 预计用时 3-5 分钟
+        </p>
+        <button class="btn" onclick="goToTest()">开始测试</button>
     </div>
 
-    <div id="test-view" class="hidden">
-        <div class="progress-bar"><div id="progress" class="progress-fill"></div></div>
-        <div id="step-indicator" style="font-size: 0.8rem; color: #999; margin-bottom: 10px;"></div>
-        <h2 id="question-text" style="font-size: 1.3rem; margin-bottom: 25px;"></h2>
-        <div id="options-box"></div>
+    <!-- 测试页 -->
+    <div id="testPage" class="page">
+        <div class="progress">
+            <div id="progressBar" class="progress-bar"></div>
+        </div>
+        <div id="stepInfo" class="step-info"></div>
+        <div id="questionText" class="question"></div>
+        <div id="optionsBox"></div>
     </div>
 
-    <div id="result-view" class="hidden">
-        <p style="letter-spacing: 2px; color: #999; font-size: 0.8rem;">匹配结果</p>
-        <h1 id="match-name" style="font-size: 2.5rem; color: var(--primary); margin: 10px 0;"></h1>
-        <div style="width: 40px; height: 3px; background: var(--accent); margin: 20px auto;"></div>
-        <p id="match-bio" style="font-weight: bold;"></p>
-        <p id="match-feature" style="text-align: left; font-size: 0.95rem; line-height: 1.8; color: #444; background: #f9f9f9; padding: 20px; border-radius: 8px;"></p>
-        <div id="match-books" style="margin-top: 20px; text-align: left;"></div>
-        <button class="btn" onclick="location.reload()">重新测试</button>
+    <!-- 结果页 -->
+    <div id="resultPage" class="page">
+        <div class="result-card">
+            <p class="result-label">Your Literary Soulmate</p>
+            <div id="writerName" class="match-name"></div>
+            <div id="matchScore" class="match-score"></div>
+            <div id="writerBio" class="match-bio"></div>
+            <div id="writerDesc" class="match-desc"></div>
+            <div class="books">
+                <p class="books-title">📚 推荐书单</p>
+                <div id="booksList"></div>
+            </div>
+            <button class="btn" onclick="location.reload()">重新测试</button>
+        </div>
     </div>
 </div>
 
 <script>
-// 这里放入我之前发给你的 writersData 名单（60人）
-const writersData = [
-    // --- 中文作家 (精选代表) ---
-    { name: "余华", bio: "现实残酷的代言人", feature: "以简洁有力的文字直击生存本质，不回避苦难，反而从中汲取力量。", books: ["《活着》", "《许三观卖血记》"], scores: { style: 9, emotion: 10, theme: 9, visual: 5, words: 8, pacing: 7, relation: 8 } },
-    { name: "张爱玲", bio: "华丽背后的苍凉意境", feature: "冷眼看穿世俗爱情与人性的千疮百孔，文字精致且自带冷意。", books: ["《倾城之恋》", "《红玫瑰与白玫瑰》"], scores: { style: 8, emotion: 10, theme: 9, visual: 9, words: 10, pacing: 5, relation: 9 } },
-    { name: "李娟", bio: "阿勒泰的清新之风", feature: "最纯粹的自然主义，带你逃离都市，回到万物生长的原野。", books: ["《我的阿勒泰》", "《冬牧场》"], scores: { style: 6, emotion: 8, theme: 6, visual: 9, words: 7, pacing: 4, relation: 7 } },
-    { name: "史铁生", bio: "生命哲思与苦难升华", feature: "在地坛的静思中，将残缺的身体转化为最健全的灵魂。文字极具厚度。", books: ["《我与地坛》", "《务虚笔记》"], scores: { style: 7, emotion: 9, theme: 10, visual: 8, words: 9, pacing: 4, relation: 7 } },
-    { name: "颜歌", bio: "平乐镇文学宇宙", feature: "以极致的方言写出后现代的人间烟火，优雅与世俗的完美平衡。", books: ["《平乐县志》", "《五月女王》"], scores: { style: 9, emotion: 7, theme: 8, visual: 7, words: 9, pacing: 6, relation: 8 } },
-    { name: "班宇", bio: "冷峻克制的东北叙事", feature: "文字像冰冻的河水，底下暗涌着普通人被时代碾压后的温情。", books: ["《冬泳》", "《逍遥游》"], scores: { style: 8, emotion: 8, theme: 8, visual: 7, words: 6, pacing: 7, relation: 8 } },
-    { name: "林奕含", bio: "极致痛苦的房思琪式呐喊", feature: "用最华美的辞藻去包裹最崩塌的人生，令人心碎的文学高度。", books: ["《房思琪的初恋乐园》"], scores: { style: 8, emotion: 10, theme: 10, visual: 8, words: 10, pacing: 6, relation: 9 } },
-    { name: "沈从文", bio: "湘西边地的牧歌", feature: "用最清澈的文字，守护人性中最后的一点纯粹与尊严。", books: ["《边城》"], scores: { style: 6, emotion: 8, theme: 7, visual: 10, words: 9, pacing: 4, relation: 8 } },
-    { name: "毕飞宇", bio: "最懂女人心的心理描写", feature: "对心理活动与权力关系的捕捉极其敏锐，文字细腻如丝。", books: ["《推拿》", "《青衣》"], scores: { style: 8, emotion: 9, theme: 8, visual: 7, words: 8, pacing: 7, relation: 9 } },
-    { name: "王小波", bio: "自由精神与黑色幽默", feature: "在荒谬的世界里做一个特立独行的猪，文字浪漫且富有逻辑。", books: ["《黄金时代》", "《沉默的大多数》"], scores: { style: 10, emotion: 7, theme: 10, visual: 6, words: 8, pacing: 8, relation: 7 } },
-
-    // --- 外国作家 (精选代表) ---
-    { name: "卡夫卡", bio: "荒诞现代主义奠基人", feature: "你是这个世界的局外人吗？卡夫卡最懂那些无处安放的焦虑。", books: ["《变形记》", "《审判》"], scores: { style: 10, emotion: 6, theme: 10, visual: 7, words: 8, pacing: 7, relation: 6 } },
-    { name: "费兰特", bio: "那不勒斯女性史诗", feature: "匿名背后是最赤裸的真实，深刻剖析女性成长的痛苦与互助。", books: ["《我的天才女友》"], scores: { style: 8, emotion: 9, theme: 8, visual: 7, words: 8, pacing: 7, relation: 10 } },
-    { name: "博尔赫斯", bio: "迷宫制作者、虚构大师", feature: "如果你喜欢哲学思考与数学般精确的想象力，他是你的唯一。", books: ["《小径分叉的花园》"], scores: { style: 10, emotion: 5, theme: 10, visual: 9, words: 10, pacing: 5, relation: 4 } },
-    { name: "石黑一雄", bio: "记忆、遗忘与错位的忠诚", feature: "克制到极致的笔法。他从不直接书写悲伤，却让你在合上书后泪流满面。", books: ["《长日将尽》", "《莫失莫忘》"], scores: { style: 8, emotion: 9, theme: 9, visual: 8, words: 8, pacing: 5, relation: 9 } },
-    { name: "马尔克斯", bio: "百年孤寂、魔幻之源", feature: "将拉丁美洲的现实与神话无缝衔接，展现恢弘壮丽的家族史诗。", books: ["《百年孤独》", "《霍乱时期的爱情》"], scores: { style: 9, emotion: 9, theme: 10, visual: 10, words: 9, pacing: 6, relation: 9 } },
-    { name: "伍尔夫", bio: "意识流与女性空间", feature: "文字像波浪一样涌动，捕捉瞬间最细微的情绪变化与感官细节。", books: ["《达洛维夫人》", "《到灯塔去》"], scores: { style: 9, emotion: 9, theme: 9, visual: 9, words: 10, pacing: 3, relation: 7 } },
-    { name: "三岛由纪夫", bio: "极致的毁灭美学", feature: "对美有着近乎疯狂的执着，在暴力与
+// 50位作家数据（大幅扩充）
+var writers = [
+    // 中文作家 (30位)
+    {name:"余华",bio:"现实残酷的代言人",desc:"以简洁有力的文字直击生存本质，不回避苦难，反而从中汲取力量。",books:["活着","许三观卖血记","兄弟"],scores:{s:9,e:10,t:9,v:5,w:8,p:7,r:8}},
+    {name:"张爱玲",bio:"华丽苍凉的都市书写",desc:"用最华美的辞藻写出最苍凉的人生。她笔下的爱情充满算计、妥协和无奈。",books:["倾城之恋","红玫瑰与白玫瑰","半生缘"],scores:{s:8,e:9,t:8,v:9,w:10,p:5,r:10}},
+    {name:"李娟",bio:"阿勒泰的清新之风",desc:"最纯粹的自然主义书写。带你逃离都市喧嚣，回到万物生长的原野。",books:["我的阿勒泰","冬牧场","羊道"],scores:{s:6,e:8,t:6,v:10,w:7,p:4,r:7}},
+    {name:"史铁生",bio:"生命哲思的诗人",desc:"在地坛的静思中，将残缺的身体转化为最健全的灵魂。",books:["我与地坛","务虚笔记","病隙碎笔"],scores:{s:7,e:9,t:10,v:7,w:9,p:4,r:7}},
+    {name:"村上春树",bio:"都市孤独的诗人",desc:"笔下充满爵士乐、咖啡和猫。善于捕捉现代人的孤独感。",books:["挪威的森林","海边的卡夫卡","1Q84"],scores:{s:8,e:9,t:8,v:7,w:8,p:6,r:7}},
+    {name:"颜歌",bio:"平乐镇文学宇宙",desc:"用方言写出后现代的人间烟火，在传统与现代之间完美平衡。",books:["平乐镇伤心故事集","五月女王","我们家"],scores:{s:9,e:7,t:8,v:7,w:9,p:7,r:8}},
+    {name:"班宇",bio:"冷峻克制的东北叙事",desc:"文字像冰冻的河水，底下暗涌着被时代碾压的普通人的温情。",books:["冬泳","逍遥游","盘锦豹子"],scores:{s:8,e:8,t:9,v:7,w:6,p:7,r:8}},
+    {name:"王小波",bio:"自由精神的旗手",desc:"在荒谬的世界里做一个特立独行的猪。充满黑色幽默和理性思考。",books:["黄金时代","沉默的大多数","爱你就像爱生命"],scores:{s:9,e:7,t:10,v:6,w:8,p:7,r:7}},
+    {name:"沈从文",bio:"湘西边地的牧歌",desc:"用最清澈的文字，守护人性中最后的纯粹与尊严。",books:["边城","湘行散记","长河"],scores:{s:7,e:8,t:7,v:10,w:9,p:4,r:8}},
+    {name:"东野圭吾",bio:"推理与人性的探索",desc:"不只写推理，更探讨人性的复杂。情节紧凑，反转精彩。",books:["白夜行","嫌疑人X的献身","解忧杂货店"],scores:{s:7,e:8,t:7,v:6,w:6,p:9,r:8}},
+    {name:"莫言",bio:"魔幻现实的乡土书写",desc:"用想象力构建高密东北乡的传奇世界，魔幻与现实交织。",books:["红高粱家族","生死疲劳","蛙"],scores:{s:9,e:8,t:9,v:9,w:8,p:7,r:8}},
+    {name:"三毛",bio:"流浪与自由的化身",desc:"用真挚的文字记录撒哈拉的故事，浪漫而真实。",books:["撒哈拉的故事","雨季不再来","梦里花落知多少"],scores:{s:7,e:9,t:7,v:9,w:8,p:5,r:8}},
+    {name:"路遥",bio:"平凡世界的史诗",desc:"用现实主义笔触书写普通人的奋斗史，充满力量和希望。",books:["平凡的世界","人生"],scores:{s:7,e:8,t:8,v:6,w:6,p:6,r:9}},
+    {name:"王安忆",bio:"上海女性的细腻书写",desc:"深入女性内心世界，用细腻笔触描绘都市生活。",books:["长恨歌","启蒙时代"],scores:{s:7,e:8,t:8,v:7,w:8,p:5,r:9}},
+    {name:"阎连科",bio:"神实主义的先锋",desc:"用荒诞揭示现实，充满想象力和批判性的独特风格。",books:["日光流年","受活","炸裂志"],scores:{s:10,e:7,t:10,v:8,w:8,p:7,r:7}},
+    {name:"毕飞宇",bio:"心理描写的高手",desc:"对人性有敏锐洞察，善于刻画复杂的人物内心。",books:["推拿","玉米","平原"],scores:{s:8,e:9,t:8,v:7,w:8,p:6,r:9}},
+    {name:"双雪涛",bio:"东北工业城的记忆",desc:"冷峻克制地书写时代变迁下的个体命运。",books:["平原上的摩西","飞行家","聋哑时代"],scores:{s:8,e:7,t:8,v:7,w:7,p:7,r:8}},
+    {name:"严歌苓",bio:"女性命运的史诗书写",desc:"跨越中西的视角，深刻描绘女性在历史洪流中的命运。",books:["陆犯焉识","芳华","第九个寡妇"],scores:{s:7,e:9,t:8,v:7,w:8,p:6,r:9}},
+    {name:"韩寒",bio:"青春叛逆的代言",desc:"用犀利幽默的文字表达年轻一代的困惑与反叛。",books:["三重门","1988我想和这个世界谈谈","后会无期"],scores:{s:6,e:7,t:7,v:6,w:7,p:8,r:7}},
+    {name:"钟晓阳",bio:"香港文学的隐忍之美",desc:"细腻隐忍的爱情书写，充满东方美学的韵味。",books:["停车暂借问","遗恨","春在绿芜中"],scores:{s:8,e:9,t:8,v:8,w:9,p:4,r:10}},
+    {name:"骆以军",bio:"台湾后现代的迷宫",desc:"碎片化叙事，充满魔幻隐喻的后现代风格。",books:["西夏旅馆","月球姓氏","女儿"],scores:{s:10,e:7,t:9,v:8,w:9,p:7,r:6}},
+    {name:"黄碧云",bio:"香港后殖民的伤痕",desc:"诗化语言书写女性伤痛和香港历史。",books:["烈女图","失城","七宗罪"],scores:{s:9,e:8,t:8,v:7,w:9,p:5,r:7}},
+    {name:"郑在欢",bio:"女工叙事的先锋",desc:"真实记录城市边缘女性的生存状态，具体而有力。",books:["女工记","浮"],scores:{s:7,e:9,t:9,v:6,w:6,p:7,r:9}},
+    {name:"阿乙",bio:"县城暴力的冷峻书写",desc:"短篇高手，书写人性灰色地带的暴力与尊严。",books:["灰故事","早上九点叫醒我","鸟看见我了"],scores:{s:8,e:7,t:8,v:6,w:7,p:8,r:6}},
+    {name:"淡豹",bio:"知识分子的性别议题",desc:"冷静观察，深刻思考女性主义和现代生活。",books:["美满","不怕你来不怕你不来"],scores:{s:8,e:6,t:9,v:5,w:8,p:6,r:7}},
+    {name:"郭爽",bio:"青年女性的都市漂泊",desc:"敏感细腻地书写年轻女性在城市中的生存与情感。",books:["正午时踏进光焰","我愿意学习发抖"],scores:{s:7,e:8,t:7,v:6,w:7,p:6,r:7}},
+    {name:"孙频",bio:"山西女性的暴烈情感",desc:"哥特式的女性书写，情感浓烈而深刻。",books:["松林夜宴图","鲛在水中央","疼"],scores:{s:9,e:9,t:8,v:8,w:8,p:7,r:8}},
+    {name:"甫跃辉",bio:"云南乡土的温情书写",desc:"清澈文字描绘云南人性温情和乡土风情。",books:["散佚的族谱","刻舟记","动物园"],scores:{s:7,e:8,t:7,v:8,w:7,p:5,r:8}},
+    {name:"笛安",bio:"都市青春的情感书写",desc:"细腻描绘都市青年的情感与成长。",books:["西决","东霓","南音"],scores:{s:7,e:8,t:6,v:7,w:7,p:7,r:9}},
+    {name:"叶广芩",bio:"老北京的贵气与俏皮",desc:"用雅俗共赏的笔触书写老北京旗民生活。",books:["采桑子","状元媒","青木川"],scores:{s:7,e:8,t:7,v:8,w:8,p:6,r:9}},
+    
+    // 外国作家 (20位)
+    {name:"卡夫卡",bio:"荒诞现代主义奠基人",desc:"如果你是这个世界的局外人，卡夫卡最懂你。",books:["变形记","审判","城堡"],scores:{s:10,e:7,t:10,v:7,w:8,p:6,r:5}},
+    {name:"费兰特",bio:"那不勒斯女性史诗",desc:"匿名背后是最赤裸的真实。深刻剖析女性友谊。",books:["我的天才女友","新名字的故事"],scores:{s:8,e:9,t:8,v:7,w:8,p:7,r:10}},
+    {name:"博尔赫斯",bio:"迷宫制作者",desc:"如果你喜欢哲学思考与精确想象力，他是唯一。",books:["小径分叉的花园","沙之书","阿莱夫"],scores:{s:10,e:5,t:10,v:8,w:10,p:5,r:4}},
+    {name:"石黑一雄",bio:"记忆与遗忘的诗人",desc:"克制到极致。从不直接书写悲伤，却让你泪流满面。",books:["长日将尽","莫失莫忘","被掩埋的巨人"],scores:{s:8,e:9,t:9,v:7,w:8,p:5,r:9}},
+    {name:"马尔克斯",bio:"魔幻现实主义大师",desc:"将拉美现实与神话无缝衔接的恢弘史诗。",books:["百年孤独","霍乱时期的爱情","族长的秋天"],scores:{s:10,e:8,t:9,v:10,w:9,p:6,r:9}},
+    {name:"伍尔夫",bio:"意识流的先驱",desc:"文字像波浪涌动，捕捉瞬间最细微的情绪变化。",books:["达洛维夫人","到灯塔去","海浪"],scores:{s:10,e:9,t:9,v:9,w:10,p:3,r:7}},
+    {name:"昆德拉",bio:"存在主义哲学家",desc:"在小说中探讨哲学，将政治、爱情和存在融为一体。",books:["不能承受的生命之轻","笑忘录","生活在别处"],scores:{s:9,e:7,t:10,v:6,w:9,p:6,r:7}},
+    {name:"黑塞",bio:"心灵探索的导师",desc:"融合东西方哲学，探讨自我实现和精神追求。",books:["悉达多","荒原狼","德米安"],scores:{s:8,e:8,t:10,v:7,w:8,p:5,r:6}},
+    {name:"海明威",bio:"硬汉文学的代表",desc:"用最简洁有力的语言，书写人的尊严和勇气。",books:["老人与海","永别了武器","太阳照常升起"],scores:{s:7,e:7,t:8,v:6,w:5,p:7,r:6}},
+    {name:"茨威格",bio:"心理描写的大师",desc:"对人性有细腻洞察，善于描写情感的微妙变化。",books:["昨日的世界","一个陌生女人的来信","人类群星闪耀时"],scores:{s:8,e:9,t:8,v:7,w:9,p:6,r:9}},
+    {name:"芥川龙之介",bio:"短篇的极致美学",desc:"精巧冷峻的短篇大师，探讨人性的阴暗面。",books:["罗生门","竹林中","地狱变"],scores:{s:8,e:7,t:8,v:8,w:8,p:7,r:6}},
+    {name:"夏目漱石",bio:"日本近代文学奠基",desc:"融合东西方思想，书写现代人的内心困境。",books:["我是猫","心","三四郎"],scores:{s:7,e:8,t:9,v:7,w:8,p:5,r:7}},
+    {name:"川端康成",bio:"东方美学的极致",desc:"用细腻笔触描绘日本之美和人生的哀伤。",books:["雪国","古都","千只鹤"],scores:{s:8,e:9,t:8,v:10,w:9,p:4,r:8}},
+    {name:"赫尔曼·黑塞",bio:"德国浪漫主义的延续",desc:"探索精神成长和自我寻找的永恒主题。",books:["悉达多","荒原狼","玻璃球游戏"],scores:{s:8,e:8,t:10,v:7,w:8,p:5,r:6}},
+    {name:"阿特伍德",bio:"女性主义反乌托邦",desc:"深刻批判性别压迫，构建警世的反乌托邦世界。",books:["使女的故事","盲刺客","别名格蕾丝"],scores:{s:8,e:8,t:9,v:8,w:8,p:7,r:8}},
+    {name:"卡尔维诺",bio:"想象力的魔术师",desc:"用寓言和实验性叙事探索文学的无限可能。",books:["看不见的城市","如果在冬夜一个旅人","树上的男爵"],scores:{s:10,e:6,t:9,v:9,w:9,p:5,r:5}},
+    {name:"托尔斯泰",bio:"俄国文学的巨匠",desc:"恢弘史诗描绘人性深度和社会全景。",books:["安娜·卡列尼娜","战争与和平","复活"],scores:{s:8,e:9,t:10,v:8,w:8,p:5,r:10}},
+    {name:"陀思妥耶夫斯基",bio:"人性深渊的探索者",desc:"深入人性最黑暗的角落，探讨罪与罚的永恒命题。",books:["罪与罚","卡拉马佐夫兄弟","白痴"],scores:{s:9,e:10,t:10,v:7,w:8,p:7,r:9}},
+    {name:"简·奥斯汀",bio:"英国古典爱情小说",desc:"用幽默讽刺描绘社会风俗和爱情婚姻。",books:["傲慢与偏见","理智与情感","爱玛"],scores:{s:6,e:7,t:6,v:7,w:7,p:5,r:10}},
+    {name:"加缪",bio:"荒诞哲学的代言",desc:"在荒诞的世界中寻找生存的意义和反抗的力量。",books:["局外人","鼠疫","西西弗神话"],scores:{s:8,e:6,t:10,v:6,w:7,p:7,r:6}}
 ];
-        
-const questions = [
-    { q: "如果你能拥有一张画，你希望它是？", options: [
-        { t: "极简的黑白版画，只有冷冽的线条", s: { style: 4, visual: 2, words: 2 } },
-        { t: "色彩浓郁、人物繁多的拉美油画", s: { style: 3, visual: 5, words: 2 } },
-        { t: "一幅充满隐喻的超现实拼贴图", s: { style: 5, visual: 3, theme: 4 } }
+
+// 测试题目（保持不变）
+var questions = [
+    {q:"如果你能拥有一张画，你希望它是？",opts:[
+        {t:"极简的黑白版画，只有冷冽的线条",s:{s:4,v:2,w:2}},
+        {t:"色彩浓郁、人物繁多的拉美油画",s:{s:3,v:5,w:2}},
+        {t:"一幅充满隐喻的超现实拼贴图",s:{s:5,v:3,t:4}}
     ]},
-    { q: "当你面对一种无法言说的痛苦，你更倾向？", options: [
-        { t: "冷峻地剖析它，像做手术一样精准", s: { words: 5, emotion: 2, pacing: 4 } },
-        { t: "用优美的词句包裹它，赋予其诗意", s: { style: 4, words: 5, emotion: 4 } },
-        { t: "沉默地感受它，在孤独中消化", s: { emotion: 5, relation: 2, theme: 4 } }
+    {q:"当你面对无法言说的痛苦，你更倾向？",opts:[
+        {t:"冷峻地剖析它，像做手术一样精准",s:{w:5,e:2,p:4}},
+        {t:"用优美的词句包裹它，赋予其诗意",s:{s:4,w:5,e:4}},
+        {t:"沉默地感受它，在孤独中消化",s:{e:5,r:2,t:4}}
     ]},
-    { q: "你如何看待一段刻骨铭心的友谊？", options: [
-        { t: "即使充满竞争与嫉妒，也是彼此的救赎", s: { relation: 5, emotion: 4 } },
-        { t: "它是两个孤独灵魂在荒原上的偶遇", s: { relation: 3, theme: 5, style: 3 } },
-        { t: "它是家族、时代背景下的必然连接", s: { relation: 4, theme: 3, pacing: 2 } }
+    {q:"你如何看待一段刻骨铭心的友谊？",opts:[
+        {t:"即使充满竞争与嫉妒，也是彼此的救赎",s:{r:5,e:4}},
+        {t:"它是两个孤独灵魂在荒原上的偶遇",s:{r:3,t:5,s:3}},
+        {t:"它是家族、时代背景下的必然连接",s:{r:4,t:3,p:2}}
     ]},
-    { q: "读到哪里你会最想“标记”？", options: [
-        { t: "极其深刻的人生格言、哲学金句", s: { theme: 5, words: 4 } },
-        { t: "对感官（气味、光影）惊为天人的描写", s: { visual: 5, words: 5 } },
-        { t: "反转惊人、停不下来的情节段落", s: { pacing: 5, style: 2 } }
+    {q:"读到哪里你会最想标记？",opts:[
+        {t:"极其深刻的人生格言、哲学金句",s:{t:5,w:4}},
+        {t:"对感官惊为天人的描写",s:{v:5,w:5}},
+        {t:"反转惊人、停不下来的情节段落",s:{p:5,s:2}}
     ]},
-    { q: "选择你理想中的生活节奏：", options: [
-        { t: "慢火炖煮，不放过任何细腻的细节", s: { pacing: 1, visual: 4, style: 3 } },
-        { t: "大步流星，情节跌宕起伏", s: { pacing: 5, emotion: 2 } },
-        { t: "像梦游一样，在碎片中跳跃", s: { pacing: 3, style: 5, visual: 2 } }
+    {q:"选择你理想中的生活节奏：",opts:[
+        {t:"慢火炖煮，不放过任何细腻的细节",s:{p:1,v:4,s:3}},
+        {t:"大步流星，情节跌宕起伏",s:{p:5,e:2}},
+        {t:"像梦游一样，在碎片中跳跃",s:{p:3,s:5,v:2}}
     ]},
-    { q: "你认为文学最大的作用是？", options: [
-        { t: "让我发现自己从未意识到的真相", s: { theme: 5, emotion: 3, style: 4 } },
-        { t: "为我疲倦的生活提供一处避难所", s: { emotion: 5, visual: 3 } },
-        { t: "见证那些正在消失的人群与历史", s: { theme: 4, relation: 4, pacing: 2 } }
+    {q:"你认为文学最大的作用是？",opts:[
+        {t:"让我发现自己从未意识到的真相",s:{t:5,e:3,s:4}},
+        {t:"为我疲倦的生活提供一处避难所",s:{e:5,v:3}},
+        {t:"见证那些正在消失的人群与历史",s:{t:4,r:4,p:2}}
     ]},
-    { q: "哪种“孤独”更让你有共鸣？", options: [
-        { t: "被人群推挤、被体制束缚的现代孤独", s: { theme: 5, relation: 2, style: 4 } },
-        { t: "身处旷野、面对宇宙的虚无感", s: { theme: 3, emotion: 3, visual: 5 } },
-        { t: "在一场热烈聚会过后的寂寞", s: { emotion: 5, relation: 4, words: 3 } }
+    {q:"哪种孤独更让你有共鸣？",opts:[
+        {t:"被人群推挤、被体制束缚的现代孤独",s:{t:5,r:2,s:4}},
+        {t:"身处旷野、面对宇宙的虚无感",s:{t:3,e:3,v:5}},
+        {t:"在一场热烈聚会过后的寂寞",s:{e:5,r:4,w:3}}
     ]},
-    { q: "如果要把你的生活拍成电影，色调是？", options: [
-        { t: "灰暗、粗颗粒的纪实风格", s: { visual: 1, style: 2, theme: 4 } },
-        { t: "柔焦、带有怀旧滤镜的淡彩色", s: { visual: 3, emotion: 4, words: 3 } },
-        { t: "高对比度、极其绚烂的色彩", s: { visual: 5, style: 5, emotion: 3 } }
+    {q:"如果要把你的生活拍成电影，色调是？",opts:[
+        {t:"灰暗、粗颗粒的纪实风格",s:{v:1,s:2,t:4}},
+        {t:"柔焦、带有怀旧滤镜的淡彩色",s:{v:3,e:4,w:3}},
+        {t:"高对比度、极其绚烂的色彩",s:{v:5,s:5,e:3}}
     ]},
-    { q: "你喜欢的对话风格是？", options: [
-        { t: "极其克制，言下之意远多于字面意思", s: { words: 2, style: 4, theme: 4 } },
-        { t: "充满火药味、直接且有力", s: { words: 3, emotion: 5, pacing: 5 } },
-        { t: "优雅、富有韵律，像跳舞一样", s: { words: 5, style: 2, visual: 3 } }
+    {q:"你喜欢的对话风格是？",opts:[
+        {t:"极其克制，言下之意远多于字面意思",s:{w:2,s:4,t:4}},
+        {t:"充满火药味、直接且有力",s:{w:3,e:5,p:5}},
+        {t:"优雅、富有韵律，像跳舞一样",s:{w:5,s:2,v:3}}
     ]},
-    { q: "哪种场景更吸引你？", options: [
-        { t: "破旧工业区里的一场无声告别", s: { visual: 2, relation: 4, emotion: 4 } },
-        { t: "异域海岛上发生的不可思议奇迹", s: { visual: 5, style: 5, pacing: 3 } },
-        { t: "一个家族在百年间的兴衰更迭", s: { theme: 4, relation: 5, pacing: 1 } }
+    {q:"哪种场景更吸引你？",opts:[
+        {t:"破旧工业区里的一场无声告别",s:{v:2,r:4,e:4}},
+        {t:"异域海岛上发生的不可思议奇迹",s:{v:5,s:5,p:3}},
+        {t:"一个家族在百年间的兴衰更迭",s:{t:4,r:5,p:1}}
     ]},
-    { q: "面对社会的虚伪，你更偏向？", options: [
-        { t: "冷嘲热讽，保持绝对的清醒", s: { theme: 5, words: 4, style: 4 } },
-        { t: "退回内心，守护自己的小天地", s: { theme: 2, emotion: 5, relation: 2 } },
-        { t: "与之共存，在灰色地带里生存", s: { theme: 3, pacing: 3, relation: 4 } }
+    {q:"面对社会的虚伪，你更偏向？",opts:[
+        {t:"冷嘲热讽，保持绝对的清醒",s:{t:5,w:4,s:4}},
+        {t:"退回内心，守护自己的小天地",s:{t:2,e:5,r:2}},
+        {t:"与之共存，在灰色地带里生存",s:{t:3,p:3,r:4}}
     ]},
-    { q: "选择一句你现在的内心独白：", options: [
-        { t: "“我只是这个世界的局外人。”", s: { theme: 5, emotion: 3, style: 4 } },
-        { t: "“活着本身就是奇迹。”", s: { theme: 2, emotion: 5, visual: 3 } },
-        { t: "“我想建立一种深刻的连接。”", s: { relation: 5, emotion: 4, words: 3 } }
+    {q:"选择一句你现在的内心独白：",opts:[
+        {t:"我只是这个世界的局外人",s:{t:5,e:3,s:4}},
+        {t:"活着本身就是奇迹",s:{t:2,e:5,v:3}},
+        {t:"我想建立一种深刻的连接",s:{r:5,e:4,w:3}}
     ]},
-    { q: "如果你可以选择重生在某个年代？", options: [
-        { t: "未来的赛博世界，充满未知", s: { style: 5, visual: 2, theme: 5 } },
-        { t: "古典时代，一切都缓慢而从容", s: { pacing: 1, visual: 3, words: 5 } },
-        { t: "动荡的黄金时代，充满了浪漫与冲突", s: { emotion: 5, relation: 4, pacing: 5 } }
+    {q:"如果你可以选择重生在某个年代？",opts:[
+        {t:"未来的赛博世界，充满未知",s:{s:5,v:2,t:5}},
+        {t:"古典时代，一切都缓慢而从容",s:{p:1,v:3,w:5}},
+        {t:"动荡的黄金时代，充满浪漫与冲突",s:{e:5,r:4,p:5}}
     ]},
-    { q: "测试最后，你希望得到的推荐是？", options: [
-        { t: "能让我读到热泪盈眶的故事", s: { emotion: 5, relation: 4 } },
-        { t: "能让我大脑开启风暴的著作", s: { theme: 5, style: 5, words: 4 } },
-        { t: "能让我静下心来思考余生的作品", s: { theme: 4, emotion: 5, pacing: 1 } }
+    {q:"测试最后，你希望得到的推荐是？",opts:[
+        {t:"能让我读到热泪盈眶的故事",s:{e:5,r:4}},
+        {t:"能让我大脑开启风暴的著作",s:{t:5,s:5,w:4}},
+        {t:"能让我静下心来思考余生的作品",s:{t:4,e:5,p:1}}
     ]}
 ];
 
-let currentStep = 0;
-let userScores = { style: 0, emotion: 0, theme: 0 };
+// JavaScript逻辑（保持不变）
+var currentQ = 0;
+var scores = {s:0,e:0,t:0,v:0,w:0,p:0,r:0};
 
-// 核心跳转函数：直接控制 display 属性
-function startTest() {
-    console.log("Button clicked!"); // 调试：如果没反应，看控制台
-    document.getElementById('home-view').style.display = 'none';
-    document.getElementById('test-view').classList.remove('hidden');
+function showPage(pageId) {
+    var pages = document.querySelectorAll('.page');
+    for(var i=0; i<pages.length; i++) {
+        pages[i].classList.remove('active');
+    }
+    document.getElementById(pageId).classList.add('active');
+}
+
+function goToTest() {
+    showPage('testPage');
     showQuestion();
 }
 
 function showQuestion() {
-    const q = questions[currentStep];
-    document.getElementById('progress').style.width = ((currentStep / questions.length) * 100) + '%';
-    document.getElementById('step-indicator').innerText = `${currentStep + 1} / ${questions.length}`;
-    document.getElementById('question-text').innerText = q.q;
-    const box = document.getElementById('options-box');
+    var q = questions[currentQ];
+    var progress = (currentQ / questions.length * 100);
+    document.getElementById('progressBar').style.width = progress + '%';
+    document.getElementById('stepInfo').innerText = '第 ' + (currentQ+1) + ' 题 / 共 ' + questions.length + ' 题';
+    document.getElementById('questionText').innerText = q.q;
+    
+    var box = document.getElementById('optionsBox');
     box.innerHTML = '';
-    q.options.forEach(opt => {
-        const btn = document.createElement('button');
-        btn.className = 'option-btn';
-        btn.innerText = opt.t;
-        btn.onclick = () => {
-            for(let trait in opt.s) userScores[trait] = (userScores[trait] || 0) + opt.s[trait];
-            currentStep++;
-            if(currentStep < questions.length) showQuestion(); else showResult();
-        };
-        box.appendChild(btn);
-    });
+    
+    for(var i=0; i<q.opts.length; i++) {
+        var opt = q.opts[i];
+        var div = document.createElement('div');
+        div.className = 'option';
+        div.innerText = opt.t;
+        div.onclick = (function(optScores) {
+            return function() { selectOption(optScores); };
+        })(opt.s);
+        box.appendChild(div);
+    }
+}
+
+function selectOption(optScores) {
+    for(var key in optScores) {
+        scores[key] += optScores[key];
+    }
+    currentQ++;
+    if(currentQ < questions.length) {
+        showQuestion();
+    } else {
+        showResult();
+    }
 }
 
 function showResult() {
-    document.getElementById('test-view').style.display = 'none';
-    document.getElementById('result-view').classList.remove('hidden');
+    showPage('resultPage');
     
-    let bestMatch = null;
-    let maxSimilarity = -Infinity;
-
-    writersData.forEach(writer => {
-        let dotProduct = 0;
-        let userMag = 0;
-        let writerMag = 0;
-
-        // 对齐 7 个维度进行向量计算
-        const traits = ['style', 'visual', 'words', 'pacing', 'emotion', 'relation', 'theme'];
-        traits.forEach(trait => {
-            let u = userScores[trait] || 0;
-            let w = writer.scores[trait] || 5;
-            dotProduct += u * w;
+    var bestWriter = null;
+    var maxScore = -999;
+    
+    for(var i=0; i<writers.length; i++) {
+        var w = writers[i];
+        var similarity = 0;
+        var userMag = 0;
+        var writerMag = 0;
+        
+        var traits = ['s','e','t','v','w','p','r'];
+        for(var j=0; j<traits.length; j++) {
+            var tr = traits[j];
+            var u = scores[tr] || 0;
+            var wv = w.scores[tr] || 5;
+            similarity += u * wv;
             userMag += u * u;
-            writerMag += w * w;
-        });
-
-        let similarity = dotProduct / (Math.sqrt(userMag) * Math.sqrt(writerMag));
-        if (similarity > maxSimilarity) {
-            maxSimilarity = similarity;
-            bestMatch = writer;
+            writerMag += wv * wv;
         }
-    });
-
-    // 渲染结果
-    document.getElementById('match-name').innerText = bestMatch.name;
-    document.getElementById('match-bio').innerText = bestMatch.bio;
-    document.getElementById('match-feature').innerText = bestMatch.feature;
-    const bookBox = document.getElementById('match-books');
-    bookBox.innerHTML = '<p style="font-weight:bold; margin-bottom:5px;">【灵魂书单】</p>';
-    bestMatch.books.forEach(b => {
-        bookBox.innerHTML += `<span style="display:inline-block; background:#eee; padding:4px 10px; margin:5px; border-radius:3px; font-size:0.85rem;">${b}</span>`;
-    });
+        
+        var finalScore = similarity / (Math.sqrt(userMag) * Math.sqrt(writerMag));
+        
+        if(finalScore > maxScore) {
+            maxScore = finalScore;
+            bestWriter = w;
+        }
+    }
+    
+    var percentage = Math.min(98, Math.max(65, Math.round(maxScore * 100)));
+    
+    document.getElementById('writerName').innerText = bestWriter.name;
+    document.getElementById('matchScore').innerText = percentage + '%';
+    document.getElementById('writerBio').innerText = bestWriter.bio;
+    document.getElementById('writerDesc').innerText = bestWriter.desc;
+    
+    var bookBox = document.getElementById('booksList');
+    bookBox.innerHTML = '';
+    for(var i=0; i<bestWriter.books.length; i++) {
+        var span = document.createElement('span');
+        span.className = 'book-item';
+        span.innerText = bestWriter.books[i];
+        bookBox.appendChild(span);
+    }
 }
 </script>
+
 </body>
 </html>
+
