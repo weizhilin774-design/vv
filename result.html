@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>测试结果 - 找到你的文学灵魂伴侣</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Noto+Serif+SC:wght@400;600;700&family=Space+Mono&display=swap" rel="stylesheet">
+</head>
+<body class="result-page">
+    <div class="background-texture"></div>
+    
+    <!-- 加载动画 -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <h2 class="loading-title">正在分析你的阅读DNA...</h2>
+            <p class="loading-text" id="loadingText">计算与60位作家的匹配度</p>
+        </div>
+    </div>
+    
+    <!-- 结果内容 -->
+    <main class="result-container" id="resultContainer" style="display: none;">
+        <div class="result-header">
+            <h1 class="result-title">你的文学灵魂伴侣是</h1>
+        </div>
+        
+        <!-- 主要匹配作家 -->
+        <div class="primary-match">
+            <div class="writer-card primary">
+                <div class="writer-avatar" id="primaryAvatar">
+                    <span class="avatar-placeholder">📚</span>
+                </div>
+                <h2 class="writer-name" id="primaryName"></h2>
+                <div class="match-score">
+                    <div class="score-circle">
+                        <span class="score-number" id="primaryScore">92</span>
+                        <span class="score-symbol">%</span>
+                    </div>
+                    <p class="score-label">匹配度</p>
+                </div>
+                <p class="writer-bio" id="primaryBio"></p>
+                
+                <div class="writer-books">
+                    <h3 class="books-title">推荐书单</h3>
+                    <ul class="books-list" id="primaryBooks"></ul>
+                </div>
+                
+                <div class="writer-analysis">
+                    <h3 class="analysis-title">为什么是TA？</h3>
+                    <p class="analysis-text" id="primaryAnalysis"></p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 次要匹配作家 -->
+        <div class="secondary-matches">
+            <h3 class="section-title">你可能还会喜欢</h3>
+            <div class="secondary-grid">
+                <div class="writer-card secondary" id="secondary1">
+                    <div class="writer-avatar-small">
+                        <span class="avatar-placeholder">📖</span>
+                    </div>
+                    <h4 class="writer-name-small" id="secondary1Name"></h4>
+                    <p class="match-score-small"><span id="secondary1Score">85</span>% 匹配</p>
+                    <p class="writer-bio-small" id="secondary1Bio"></p>
+                </div>
+                
+                <div class="writer-card secondary" id="secondary2">
+                    <div class="writer-avatar-small">
+                        <span class="avatar-placeholder">✍️</span>
+                    </div>
+                    <h4 class="writer-name-small" id="secondary2Name"></h4>
+                    <p class="match-score-small"><span id="secondary2Score">78</span>% 匹配</p>
+                    <p class="writer-bio-small" id="secondary2Bio"></p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 行动按钮 -->
+        <div class="result-actions">
+            <button class="action-button primary" onclick="shareResult()">
+                <span>分享结果</span>
+                <span class="button-icon">📤</span>
+            </button>
+            <button class="action-button secondary" onclick="window.location.href='test.html'">
+                <span>重新测试</span>
+                <span class="button-icon">🔄</span>
+            </button>
+        </div>
+        
+        <!-- 个性化维度分析 -->
+        <div class="dimension-analysis">
+            <h3 class="section-title">你的阅读偏好分析</h3>
+            <div class="dimension-bars" id="dimensionBars">
+                <!-- 维度条形图将由JavaScript生成 -->
+            </div>
+        </div>
+    </main>
+    
+    <script src="js/data.js"></script>
+    <script src="js/questions.js"></script>
+    <script src="js/algorithm.js"></script>
+    <script>
+        // 获取测试结果
+        const userAnswers = JSON.parse(localStorage.getItem('userAnswers') || '{}');
+        
+        // 模拟加载过程
+        const loadingTexts = [
+            '计算与60位作家的匹配度',
+            '分析你的文学风格偏好',
+            '评估情感共鸣指数',
+            '找到最佳匹配...'
+        ];
+        
+        let textIndex = 0;
+        const loadingInterval = setInterval(() => {
+            textIndex++;
+            if (textIndex < loadingTexts.length) {
+                document.getElementById('loadingText').textContent = loadingTexts[textIndex];
+            } else {
+                clearInterval(loadingInterval);
+                showResults();
+            }
+        }, 800);
+        
+        // 显示结果
+        function showResults() {
+            setTimeout(() => {
+                document.getElementById('loadingScreen').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('loadingScreen').style.display = 'none';
+                    document.getElementById('resultContainer').style.display = 'block';
+                    
+                    // 计算匹配结果
+                    const matches = calculateMatches(userAnswers);
+                    displayResults(matches);
+                }, 500);
+            }, 1000);
+        }
+        
+        // 显示匹配结果
+        function displayResults(matches) {
+            const primary = matches[0];
+            const secondary1 = matches[1];
+            const secondary2 = matches[2];
+            
+            // 主要匹配
+            document.getElementById('primaryName').textContent = primary.writer.name;
+            document.getElementById('primaryScore').textContent = Math.round(primary.score);
+            document.getElementById('primaryBio').textContent = primary.writer.bio;
+            document.getElementById('primaryAnalysis').textContent = primary.writer.matchText;
+            
+            // 书单
+            const booksList = document.getElementById('primaryBooks');
+            primary.writer.books.forEach(book => {
+                const li = document.createElement('li');
+                li.textContent = book;
+                booksList.appendChild(li);
+            });
+            
+            // 次要匹配
+            document.getElementById('secondary1Name').textContent = secondary1.writer.name;
+            document.getElementById('secondary1Score').textContent = Math.round(secondary1.score);
+            document.getElementById('secondary1Bio').textContent = secondary1.writer.bio.substring(0, 60) + '...';
+            
+            document.getElementById('secondary2Name').textContent = secondary2.writer.name;
+            document.getElementById('secondary2Score').textContent = Math.round(secondary2.score);
+            document.getElementById('secondary2Bio').textContent = secondary2.writer.bio.substring(0, 60) + '...';
+            
+            // 维度分析
+            displayDimensionAnalysis(userAnswers);
+        }
+        
+        // 显示维度分析
+        function displayDimensionAnalysis(answers) {
+            const dimensions = [
+                { name: '文学风格', value: answers.style || 50 },
+                { name: '视觉审美', value: answers.visual || 50 },
+                { name: '词汇倾向', value: answers.words || 50 },
+                { name: '叙事节奏', value: answers.pacing || 50 },
+                { name: '情感深度', value: answers.emotion || 50 },
+                { name: '人物关系', value: answers.relations || 50 },
+                { name: '主题价值', value: answers.theme || 50 }
+            ];
+            
+            const container = document.getElementById('dimensionBars');
+            dimensions.forEach(dim => {
+                const bar = document.createElement('div');
+                bar.className = 'dimension-bar';
+                bar.innerHTML = `
+                    <div class="dimension-label">${dim.name}</div>
+                    <div class="dimension-track">
+                        <div class="dimension-fill" style="width: ${dim.value}%"></div>
+                    </div>
+                    <div class="dimension-value">${Math.round(dim.value)}%</div>
+                `;
+                container.appendChild(bar);
+            });
+        }
+        
+        // 分享功能
+        function shareResult() {
+            const primary = document.getElementById('primaryName').textContent;
+            const score = document.getElementById('primaryScore').textContent;
+            const text = `我测了"找到你的文学灵魂伴侣"，结果是${primary}，匹配度${score}%！你也来测测吧～`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: '我的文学灵魂伴侣',
+                    text: text
+                }).catch(err => console.log('分享取消'));
+            } else {
+                // 复制到剪贴板
+                navigator.clipboard.writeText(text).then(() => {
+                    alert('结果已复制到剪贴板！');
+                });
+            }
+        }
+    </script>
+</body>
+</html>
