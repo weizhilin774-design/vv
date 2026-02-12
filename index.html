@@ -202,9 +202,19 @@ let currentStep = 0;
 let userScores = { style:0, visual:0, words:0, pacing:0, emotion:0, relation:0, theme:0 };
 
 function startTest() {
-    document.getElementById('home-view').classList.add('hidden');
-    document.getElementById('test-view').classList.remove('hidden');
-    showQuestion();
+    console.log("测试开始执行..."); // 调试用，你可以按 F12 查看是否触发
+    
+    const home = document.getElementById('home-view');
+    const test = document.getElementById('test-view');
+    
+    if (home && test) {
+        home.style.display = 'none';    // 强制隐藏首页
+        test.style.display = 'block';   // 强制显示题目页
+        test.classList.remove('hidden'); // 确保隐藏类被移除
+        showQuestion();                 // 启动题目渲染
+    } else {
+        console.error("找不到页面容器，请检查 HTML ID 是否正确");
+    }
 }
 
 function showQuestion() {
